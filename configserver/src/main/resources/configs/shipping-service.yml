@@ -1,0 +1,56 @@
+server:
+  port: 8085
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: 'org.hibernate.dialect.PostgreSQLDialect'
+        jdbc.lob.non_contextual_creation: true
+    hibernate.ddl-auto: none
+    show-sql: true
+
+  datasource:
+    url: 'jdbc:postgresql://localhost:5432/delivery_shipping'
+    username: postgres
+    password: '{cipher}34964d42d5eb2434cb7c072cbc80a311ee718f7836e8f6c1dfe38a2358865267'
+    testWhileIdle: true
+    validationQuery: SELECT 1
+
+  liquibase:
+    change-log: classpath:db/db.changelog-master.xml
+
+  jackson:
+    default-property-inclusion: non_null
+
+  boot:
+    admin:
+      client:
+        url: http://localhost:8089
+
+logging:
+  level:
+    root: INFO
+    liquibase: WARN
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8082/eureka/
+
+auth:
+  signing-key: '{cipher}455d952fd23bcadf31fe76b2fbede0ac1a25cbe0fb179c9fa2a2c8b36a2ebfc4a345db1b91000109dbe47e0f1eb776c08b15fab2d4367492116286633d9da3a5'
+
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: "*"

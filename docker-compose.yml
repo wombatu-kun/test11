@@ -1,0 +1,182 @@
+version: '3.3'
+services:
+  database:
+    image: postgres:13.4-buster
+    ports:
+      - "5498:5432"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DATABASES: delivery_users,delivery_orders,delivery_shipping,delivery_queries
+    volumes:
+      - ./create-databases.sh:/docker-entrypoint-initdb.d/create-databases.sh
+    networks:
+      backend:
+        aliases:
+          - "database"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+  configserver:
+    image: wk-delivery-app/configserver:0.0.1-SNAPSHOT
+    ports:
+       - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+      ENCRYPT_KEY: "xnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeL"
+    networks:
+      backend:
+        aliases:
+          - "configserver"
+  eurekaserver:
+    image: wk-delivery-app/eurekaserver:0.0.1-SNAPSHOT
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+    networks:
+      backend:
+        aliases:
+          - "eurekaserver"
+  adminserver:
+    image: wk-delivery-app/adminserver:0.0.1-SNAPSHOT
+    ports:
+      - "8089:8089"
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+      ENCRYPT_KEY: "xnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeL"
+    depends_on:
+      - configserver
+      - eurekaserver
+    networks:
+      backend:
+        aliases:
+          - "adminserver"
+  auth-service:
+    image: wk-delivery-app/auth-service:0.0.1-SNAPSHOT
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+      ENCRYPT_KEY: "xnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeL"
+    depends_on:
+      - database
+      - configserver
+      - eurekaserver
+    restart: on-failure
+    ports:
+      - "8083:8083"
+    networks:
+      backend:
+        aliases:
+          - "auth-service"
+  gatewayserver:
+    image: wk-delivery-app/gatewayserver:0.0.1-SNAPSHOT
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+      ENCRYPT_KEY: "xnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeL"
+    depends_on:
+      - configserver
+      - eurekaserver
+      - auth-service
+    networks:
+      backend:
+        aliases:
+          - "gatewayserver"
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    ports:
+      - 2181:2181
+    networks:
+      backend:
+        aliases:
+          - "zookeeper"
+  kafka:
+    image: wurstmeister/kafka:latest
+    ports:
+      - 9092:9092
+    environment:
+      - KAFKA_ADVERTISED_HOST_NAME=kafka
+      - KAFKA_ADVERTISED_PORT=9092
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CREATE_TOPICS=users:1:1,orders:1:1
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    depends_on:
+      - zookeeper
+    networks:
+      backend:
+        aliases:
+          - "kafka"
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    networks:
+      backend:
+        aliases:
+          - "redis"
+  order-service:
+    image: wk-delivery-app/order-service:0.0.1-SNAPSHOT
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+      ENCRYPT_KEY: "xnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeL"
+    depends_on:
+      - database
+      - configserver
+      - eurekaserver
+      - auth-service
+    restart: on-failure
+    ports:
+      - "8084:8084"
+    networks:
+      backend:
+        aliases:
+          - "order-service"
+  shipping-service:
+    image: wk-delivery-app/shipping-service:0.0.1-SNAPSHOT
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+      ENCRYPT_KEY: "xnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeL"
+    depends_on:
+      - database
+      - redis
+      - configserver
+      - eurekaserver
+      - auth-service
+    restart: on-failure
+    ports:
+      - "8085:8085"
+    networks:
+      backend:
+        aliases:
+          - "shipping-service"
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    container_name: prometheus
+    networks:
+      backend:
+        aliases:
+          - "prometheus"
+  grafana:
+    image: "grafana/grafana:latest"
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=password
+    container_name: grafana
+    networks:
+      backend:
+        aliases:
+          - "grafana"
+networks:
+  backend:
+    driver: bridge

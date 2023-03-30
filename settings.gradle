@@ -1,0 +1,13 @@
+pluginManagement {
+	repositories {
+		gradlePluginPortal()
+	}
+}
+
+rootProject.name = 'wk-delivery-app'
+
+include 'configserver', 'eurekaserver', 'adminserver', 'gatewayserver', 'auth-service', 'order-service', 'shipping-service'
+
+rootProject.children.each {
+	it.buildFileName = it.name + '.gradle'
+}

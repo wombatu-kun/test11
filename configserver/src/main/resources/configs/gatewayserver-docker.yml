@@ -1,0 +1,10 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eurekaserver:8082/eureka/
+
+spring:
+  boot:
+    admin:
+      client:
+        url: http://adminserver:8089

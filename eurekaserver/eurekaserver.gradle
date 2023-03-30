@@ -1,0 +1,38 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.9'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+sourceCompatibility = '11'
+
+ext {
+	set('springCloudVersion', "2021.0.6")
+	set('springBootAdminVersion', "2.7.4")
+	set('micrometerVersion', '1.10.5')
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+	implementation 'de.codecentric:spring-boot-admin-starter-client'
+	implementation "io.micrometer:micrometer-core:${micrometerVersion}"
+	implementation "io.micrometer:micrometer-registry-prometheus:${micrometerVersion}"
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+		mavenBom "de.codecentric:spring-boot-admin-dependencies:${springBootAdminVersion}"
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+bootBuildImage {
+	imageName = "${rootProject.name}/${project.name}:${version}"
+}
