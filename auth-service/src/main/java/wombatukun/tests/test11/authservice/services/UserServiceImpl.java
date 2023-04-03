@@ -13,6 +13,7 @@ import wombatukun.tests.test11.authservice.dto.UserDto;
 import wombatukun.tests.test11.authservice.dto.UserForm;
 import wombatukun.tests.test11.authservice.enums.Role;
 import wombatukun.tests.test11.authservice.enums.Status;
+import wombatukun.tests.test11.authservice.events.UserEventPublisher;
 import wombatukun.tests.test11.authservice.exceptions.OperationNotPermittedException;
 import wombatukun.tests.test11.authservice.exceptions.RegistrationNotAllowedException;
 import wombatukun.tests.test11.authservice.exceptions.ResourceNotFoundException;
@@ -27,6 +28,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final UserEventPublisher userEventPublisher;
 
     @Transactional
     @Override
@@ -34,7 +36,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByEmail(form.getEmail()) == null) {
             User user = userMapper.mapFormToEntity(form);
             user = userRepository.save(user);
-            //todo user-event
+            userEventPublisher.sendEvent(userMapper.mapEntityToEvent(user));
             return userMapper.mapEntityToDto(user);
         } else {
             throw new RegistrationNotAllowedException("Conflict email: " + form.getEmail());
@@ -48,7 +50,7 @@ public class UserServiceImpl implements UserService {
         if (!user.getEmail().equalsIgnoreCase(authentication.getPrincipal().toString())) {
             user.setStatus(Status.SUSPENDED);
             user = userRepository.save(user);
-            //todo user-event
+            userEventPublisher.sendEvent(userMapper.mapEntityToEvent(user));
             return userMapper.mapEntityToDto(user);
         } else {
             throw new OperationNotPermittedException("unable to suspend yourself");

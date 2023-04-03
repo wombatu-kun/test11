@@ -3,7 +3,8 @@ package wombatukun.tests.test11.shippingservice.security;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.Authentication;
-import wombatukun.tests.test11.orderservice.enums.Role;
+import wombatukun.tests.test11.shippingservice.enums.Role;
+
 
 import java.util.Objects;
 

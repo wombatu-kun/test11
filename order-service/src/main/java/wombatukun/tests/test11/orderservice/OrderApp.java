@@ -7,7 +7,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.client.RestTemplate;
@@ -16,8 +15,6 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import wombatukun.tests.test11.orderservice.exceptions.handlers.CustomAsyncExceptionHandler;
 import wombatukun.tests.test11.orderservice.utils.UserContextInterceptor;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 
 @SpringBootApplication

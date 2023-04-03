@@ -31,6 +31,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation "org.springframework.security.oauth:spring-security-oauth2:${oauth2Version}"
 	implementation "org.springframework.security:spring-security-jwt:${jwtVersion}"
+	implementation "org.springframework.kafka:spring-kafka"
 	implementation "org.springdoc:springdoc-openapi-ui:${swaggerVersion}"
 	implementation "io.micrometer:micrometer-core:${micrometerVersion}"
 	implementation "io.micrometer:micrometer-registry-prometheus:${micrometerVersion}"

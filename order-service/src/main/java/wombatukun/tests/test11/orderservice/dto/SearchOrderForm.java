@@ -18,9 +18,9 @@ public class SearchOrderForm {
 
 	private Long userId;
 	private Long courierId;
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private Date createdFrom;
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private Date createdTo;
 	private Status status;
 

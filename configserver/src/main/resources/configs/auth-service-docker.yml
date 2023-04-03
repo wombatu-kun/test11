@@ -12,6 +12,10 @@ spring:
       client:
         url: http://adminserver:8089
 
+  kafka:
+    bootstrap-servers:
+      - kafka:9092
+
 eureka:
   client:
     serviceUrl:

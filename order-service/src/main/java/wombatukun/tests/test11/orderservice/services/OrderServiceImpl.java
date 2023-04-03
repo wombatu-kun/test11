@@ -23,6 +23,7 @@ import wombatukun.tests.test11.orderservice.dto.SearchOrderForm;
 import wombatukun.tests.test11.orderservice.dto.UserOrderForm;
 import wombatukun.tests.test11.orderservice.enums.Role;
 import wombatukun.tests.test11.orderservice.enums.Status;
+import wombatukun.tests.test11.orderservice.events.OrderEventPublisher;
 import wombatukun.tests.test11.orderservice.exceptions.OperationNotPermittedException;
 import wombatukun.tests.test11.orderservice.exceptions.ResourceNotFoundException;
 import wombatukun.tests.test11.orderservice.mappers.OrderMapper;
@@ -44,6 +45,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final DetailsRepository detailsRepository;
     private final OrderMapper orderMapper;
+    private final OrderEventPublisher orderEventPublisher;
 
     @Transactional(readOnly = true)
     @Override
@@ -87,7 +89,7 @@ public class OrderServiceImpl implements OrderService {
         form.setUserId(auth.getId());
         Order order = orderMapper.mapFormToEntity(form);
         order = orderRepository.save(order);
-        //todo order-event
+        orderEventPublisher.sendEvent(orderMapper.mapEntityToEvent(order));
         return orderMapper.mapEntityToDetailsDto(order);
     }
 
@@ -102,8 +104,8 @@ public class OrderServiceImpl implements OrderService {
                 Details details = order.getDetails();
                 details.setCost(form.getCost());
             }
-            //todo order-event
             order = orderRepository.save(order);
+            orderEventPublisher.sendEvent(orderMapper.mapEntityToEvent(order));
             return orderMapper.mapEntityToDetailsDto(order);
         }  else {
             throw new OperationNotPermittedException("unable to reassign this order");
@@ -119,7 +121,6 @@ public class OrderServiceImpl implements OrderService {
         if (auth.getId().equals(order.getUserId()) && Set.of(CREATED, ASSIGNED).contains(order.getStatus())) {
             order.getDetails().setDestination(destination);
             detailsRepository.save(order.getDetails());
-            //todo order-event
             return orderMapper.mapEntityToDetailsDto(order);
         } else {
             throw new OperationNotPermittedException("unable to change destination for this order");
@@ -137,7 +138,7 @@ public class OrderServiceImpl implements OrderService {
             case ROLE_COURIER: order = updateStatusByCourier(auth.getId(), order, status); break;
             default: throw new OperationNotPermittedException("unable to update status");
         }
-        //todo order-event
+        orderEventPublisher.sendEvent(orderMapper.mapEntityToEvent(order));
         return orderMapper.mapEntityToOrderDto(order);
     }
 
@@ -172,7 +173,7 @@ public class OrderServiceImpl implements OrderService {
         if (auth.getId().equals(order.getUserId()) && Set.of(CREATED, ASSIGNED).contains(order.getStatus())) {
             order.setStatus(Status.CANCELLED);
             order = orderRepository.save(order);
-            //todo order-event
+            orderEventPublisher.sendEvent(orderMapper.mapEntityToEvent(order));
             return orderMapper.mapEntityToOrderDto(order);
         } else {
             throw new OperationNotPermittedException("unable to cancel this order");

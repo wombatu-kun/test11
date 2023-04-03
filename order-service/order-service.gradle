@@ -33,6 +33,7 @@ dependencies {
 	implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
 	implementation "io.jsonwebtoken:jjwt-impl:${jjwtVersion}"
 	implementation "io.jsonwebtoken:jjwt-jackson:${jjwtVersion}"
+	implementation "org.springframework.kafka:spring-kafka"
 	implementation "org.springdoc:springdoc-openapi-ui:${swaggerVersion}"
 	implementation "io.micrometer:micrometer-core:${micrometerVersion}"
 	implementation "io.micrometer:micrometer-registry-prometheus:${micrometerVersion}"

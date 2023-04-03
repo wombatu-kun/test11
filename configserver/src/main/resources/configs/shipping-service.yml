@@ -28,6 +28,19 @@ spring:
       client:
         url: http://localhost:8089
 
+  kafka:
+    bootstrap-servers:
+      - localhost:9092
+    template:
+      default-topic: orders
+    consumer:
+      group-id: shipping-group
+      auto-offset-reset: earliest
+
+redis:
+  host: localhost
+  port: 6379
+
 logging:
   level:
     root: INFO

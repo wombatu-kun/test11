@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import wombatukun.tests.test11.shippingservice.dto.CommonResponse;
 import wombatukun.tests.test11.shippingservice.dto.ShippingDto;
+import wombatukun.tests.test11.shippingservice.dto.ShippingForm;
 import wombatukun.tests.test11.shippingservice.exceptions.handlers.GlobalExceptionHandler;
 import wombatukun.tests.test11.shippingservice.services.ShippingService;
 
@@ -26,20 +27,14 @@ public class ShippingController extends GlobalExceptionHandler {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/{orderId}/shipping")
-    public CommonResponse<List<ShippingDto>> getOrderShipping(
-            Authentication authentication,
-            @PathVariable("orderId") Long orderId
-    ) {
-        return CommonResponse.success(shippingService.getShippingTrack(authentication, orderId));
+    public CommonResponse<List<ShippingDto>> getOrderShipping(@PathVariable("orderId") Long orderId) {
+        return CommonResponse.success(shippingService.getShippingTrack(orderId));
     }
 
     @PreAuthorize("hasRole('ROLE_COURIER')")
     @PostMapping("/shipping")
-    public void addTrackingPoint(
-            Authentication authentication,
-            @RequestBody ShippingDto shippingDto
-    ) {
-        shippingService.addShipping(authentication, shippingDto);
+    public void addTrackingPoint(Authentication authentication, @RequestBody ShippingForm shippingForm) {
+        shippingService.addShipping(authentication, shippingForm);
     }
 
 }

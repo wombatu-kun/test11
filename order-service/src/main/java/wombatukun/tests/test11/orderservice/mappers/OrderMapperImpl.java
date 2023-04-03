@@ -10,6 +10,8 @@ import wombatukun.tests.test11.orderservice.dto.OrderDto;
 import wombatukun.tests.test11.orderservice.dto.SearchOrderForm;
 import wombatukun.tests.test11.orderservice.dto.UserOrderForm;
 import wombatukun.tests.test11.orderservice.enums.Status;
+import wombatukun.tests.test11.orderservice.events.OrderEvent;
+import wombatukun.tests.test11.orderservice.utils.UserContext;
 
 import java.util.Date;
 
@@ -70,4 +72,17 @@ public class OrderMapperImpl implements OrderMapper {
                 .build();
         return new OrderSpec(query);
     }
+
+    @Override
+    public OrderEvent mapEntityToEvent(Order order) {
+        return OrderEvent.builder()
+                .type(OrderEvent.class.getTypeName())
+                .id(order.getId())
+                .status(order.getStatus())
+                .timestamp(new Date())
+                .courierId(order.getCourierId())
+                .correlationId(UserContext.getCorrelationId())
+                .build();
+    }
+
 }
