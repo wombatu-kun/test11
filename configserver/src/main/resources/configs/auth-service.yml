@@ -33,11 +33,14 @@ spring:
       - localhost:9092
     template:
       default-topic: users
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 logging:
   level:
     root: INFO
     liquibase: WARN
+    wombatukun: DEBUG
 
 eureka:
   instance:

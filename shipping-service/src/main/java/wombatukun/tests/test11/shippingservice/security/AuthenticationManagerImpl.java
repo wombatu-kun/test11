@@ -7,6 +7,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+import wombatukun.tests.test11.common.security.AuthenticatedUser;
+import wombatukun.tests.test11.common.security.JWTUtil;
 
 import java.util.stream.Collectors;
 
@@ -23,9 +25,9 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
         AuthenticatedUser authUser = jwtUtil.validateToken(token);
         if (authUser != null) {
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                    authUser.userName,
+                    authUser.getUserName(),
                     null,
-                    authUser.roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())
+                    authUser.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())
             );
             auth.setDetails(authUser.getUserId());
             return auth;

@@ -1,6 +1,7 @@
 package wombatukun.tests.test11.shippingservice;
 
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -12,8 +13,9 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import wombatukun.tests.test11.common.security.JWTUtil;
+import wombatukun.tests.test11.common.usercontext.UserContextInterceptor;
 import wombatukun.tests.test11.shippingservice.exceptions.handlers.CustomAsyncExceptionHandler;
-import wombatukun.tests.test11.shippingservice.utils.UserContextInterceptor;
 
 import java.util.Locale;
 
@@ -22,6 +24,14 @@ import java.util.Locale;
 @EnableDiscoveryClient
 @EnableAsync
 public class ShippingApp implements AsyncConfigurer {
+
+	@Value("${auth.signing-key}")
+	private String signingKey;
+
+	@Bean
+	public JWTUtil jwtUtil() {
+		return new JWTUtil(signingKey);
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(ShippingApp.class, args);

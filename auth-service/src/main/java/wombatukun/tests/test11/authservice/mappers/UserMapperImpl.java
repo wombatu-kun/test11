@@ -7,8 +7,9 @@ import wombatukun.tests.test11.authservice.dto.UserDto;
 import wombatukun.tests.test11.authservice.dao.entities.User;
 import wombatukun.tests.test11.authservice.dto.UserForm;
 import wombatukun.tests.test11.authservice.enums.Status;
-import wombatukun.tests.test11.authservice.events.UserEvent;
-import wombatukun.tests.test11.authservice.utils.UserContext;
+import wombatukun.tests.test11.common.usercontext.UserContext;
+import wombatukun.tests.test11.common.enums.UserStatus;
+import wombatukun.tests.test11.common.messaging.UserEvent;
 
 import java.util.Date;
 
@@ -47,7 +48,7 @@ public class UserMapperImpl implements UserMapper {
         return UserEvent.builder()
                 .type(UserEvent.class.getTypeName())
                 .id(user.getId())
-                .status(user.getStatus())
+                .status(UserStatus.valueOf(user.getStatus().name()))
                 .timestamp(new Date())
                 .correlationId(UserContext.getCorrelationId())
                 .build();

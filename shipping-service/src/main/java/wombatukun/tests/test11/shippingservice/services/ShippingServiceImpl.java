@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import wombatukun.tests.test11.common.security.AuthInfo;
 import wombatukun.tests.test11.shippingservice.dao.entities.AssignmentCache;
 import wombatukun.tests.test11.shippingservice.dao.entities.Shipping;
 import wombatukun.tests.test11.shippingservice.dao.repositories.ShippingRepository;
 import wombatukun.tests.test11.shippingservice.dto.ShippingDto;
 import wombatukun.tests.test11.shippingservice.dto.ShippingForm;
 import wombatukun.tests.test11.shippingservice.mappers.ShippingMapper;
-import wombatukun.tests.test11.shippingservice.security.AuthInfo;
 
 import java.util.HashSet;
 import java.util.List;

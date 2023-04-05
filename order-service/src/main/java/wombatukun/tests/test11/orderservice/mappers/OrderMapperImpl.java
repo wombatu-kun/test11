@@ -1,6 +1,9 @@
 package wombatukun.tests.test11.orderservice.mappers;
 
 import org.springframework.stereotype.Component;
+import wombatukun.tests.test11.common.enums.OrderStatus;
+import wombatukun.tests.test11.common.messaging.OrderEvent;
+import wombatukun.tests.test11.common.usercontext.UserContext;
 import wombatukun.tests.test11.orderservice.dao.entities.Details;
 import wombatukun.tests.test11.orderservice.dao.entities.Order;
 import wombatukun.tests.test11.orderservice.dao.queries.OrderQuery;
@@ -10,8 +13,6 @@ import wombatukun.tests.test11.orderservice.dto.OrderDto;
 import wombatukun.tests.test11.orderservice.dto.SearchOrderForm;
 import wombatukun.tests.test11.orderservice.dto.UserOrderForm;
 import wombatukun.tests.test11.orderservice.enums.Status;
-import wombatukun.tests.test11.orderservice.events.OrderEvent;
-import wombatukun.tests.test11.orderservice.utils.UserContext;
 
 import java.util.Date;
 
@@ -78,7 +79,7 @@ public class OrderMapperImpl implements OrderMapper {
         return OrderEvent.builder()
                 .type(OrderEvent.class.getTypeName())
                 .id(order.getId())
-                .status(order.getStatus())
+                .status(OrderStatus.valueOf(order.getStatus().name()))
                 .timestamp(new Date())
                 .courierId(order.getCourierId())
                 .correlationId(UserContext.getCorrelationId())

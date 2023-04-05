@@ -1,6 +1,8 @@
 package wombatukun.tests.test11.orderservice.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -10,6 +12,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationFilter;
+import wombatukun.tests.test11.common.security.JWTUtil;
+import wombatukun.tests.test11.common.usercontext.UserContextFilter;
 
 
 @Configuration
@@ -30,6 +34,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new BearerTokenAuthenticationFilter(authenticationManager))
+                .addFilter(new UserContextFilter())
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }

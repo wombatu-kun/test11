@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationFilter;
+import wombatukun.tests.test11.common.usercontext.UserContextFilter;
 
 
 @Configuration
@@ -30,6 +31,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new BearerTokenAuthenticationFilter(authenticationManager))
+                .addFilter(new UserContextFilter())
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }

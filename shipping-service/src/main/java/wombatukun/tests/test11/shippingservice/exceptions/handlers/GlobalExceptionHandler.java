@@ -11,9 +11,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import wombatukun.tests.test11.common.exceptions.OperationNotPermittedException;
+import wombatukun.tests.test11.common.exceptions.ResourceNotFoundException;
 import wombatukun.tests.test11.shippingservice.dto.CommonResponse;
-import wombatukun.tests.test11.shippingservice.exceptions.OperationNotPermittedException;
-import wombatukun.tests.test11.shippingservice.exceptions.ResourceNotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
