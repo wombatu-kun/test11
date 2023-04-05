@@ -35,7 +35,9 @@ public class Shipping {
 
     @PrePersist
     protected void onCreate() {
-        wasAt = new Date();
+        if (wasAt == null) {
+            wasAt = new Date();
+        }
     }
 
     @Override
