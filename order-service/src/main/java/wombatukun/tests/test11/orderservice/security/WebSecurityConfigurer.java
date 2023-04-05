@@ -34,7 +34,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new BearerTokenAuthenticationFilter(authenticationManager))
-                .addFilter(new UserContextFilter())
+                .addFilterAfter(new UserContextFilter(), BearerTokenAuthenticationFilter.class)
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }

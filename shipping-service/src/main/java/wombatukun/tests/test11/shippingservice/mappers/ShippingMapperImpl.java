@@ -26,6 +26,6 @@ public class ShippingMapperImpl implements ShippingMapper {
         shipping.setWasAt(form.getWasAt());
         shipping.setLatitude(form.getLatitude());
         shipping.setLongitude(form.getLongitude());
-        return null;
+        return shipping;
     }
 }

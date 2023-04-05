@@ -37,8 +37,8 @@ spring:
       group-id: shipping-group
       auto-offset-reset: earliest
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-#      properties:
-#        spring.json.trusted.packages: wombatukun.tests.test11.*
+      properties:
+        spring.json.trusted.packages: wombatukun.tests.test11.*
 
 redis:
   host: localhost
