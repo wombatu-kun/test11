@@ -1,4 +1,4 @@
-package wombatukun.tests.test11.shippingservice.events;
+package wombatukun.tests.test11.shippingservice.messaging;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package wombatukun.tests.test11.shippingservice.dto;
+package wombatukun.tests.test11.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

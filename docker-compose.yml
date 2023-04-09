@@ -128,7 +128,6 @@ services:
       - database
       - configserver
       - eurekaserver
-      - auth-service
     restart: on-failure
     ports:
       - "8084:8084"
@@ -146,7 +145,6 @@ services:
       - redis
       - configserver
       - eurekaserver
-      - auth-service
     restart: on-failure
     ports:
       - "8085:8085"
@@ -154,6 +152,22 @@ services:
       backend:
         aliases:
           - "shipping-service"
+  query-service:
+    image: wk-delivery-app/query-service:0.0.1-SNAPSHOT
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+      ENCRYPT_KEY: "xnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeL"
+    depends_on:
+      - database
+      - configserver
+      - eurekaserver
+    restart: on-failure
+    ports:
+      - "8086:8086"
+    networks:
+      backend:
+        aliases:
+          - "query-service"
   prometheus:
     image: prom/prometheus:latest
     ports:

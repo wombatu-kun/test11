@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import wombatukun.tests.test11.shippingservice.dto.CommonResponse;
+import wombatukun.tests.test11.common.dto.CommonResponse;
 import wombatukun.tests.test11.shippingservice.dto.ShippingDto;
 import wombatukun.tests.test11.shippingservice.dto.ShippingForm;
 import wombatukun.tests.test11.shippingservice.exceptions.handlers.GlobalExceptionHandler;

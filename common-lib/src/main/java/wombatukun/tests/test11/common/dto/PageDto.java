@@ -1,4 +1,4 @@
-package wombatukun.tests.test11.orderservice.dto;
+package wombatukun.tests.test11.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

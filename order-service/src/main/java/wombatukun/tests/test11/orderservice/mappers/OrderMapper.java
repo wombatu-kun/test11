@@ -8,8 +8,6 @@ import wombatukun.tests.test11.orderservice.dto.OrderDto;
 import wombatukun.tests.test11.orderservice.dto.SearchOrderForm;
 import wombatukun.tests.test11.orderservice.dto.UserOrderForm;
 
-import java.util.Map;
-
 public interface OrderMapper {
 
     OrderDto mapEntityToOrderDto(Order order);

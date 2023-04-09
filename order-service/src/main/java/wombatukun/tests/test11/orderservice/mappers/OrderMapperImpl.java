@@ -81,7 +81,9 @@ public class OrderMapperImpl implements OrderMapper {
                 .id(order.getId())
                 .status(OrderStatus.valueOf(order.getStatus().name()))
                 .timestamp(new Date())
+                .userId(order.getUserId())
                 .courierId(order.getCourierId())
+                .cost(order.getDetails().getCost())
                 .correlationId(UserContext.getCorrelationId())
                 .build();
     }
