@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import wombatukun.tests.test11.authservice.dto.UserDto;
 import wombatukun.tests.test11.authservice.dto.UserForm;
 import wombatukun.tests.test11.authservice.enums.Role;
+import wombatukun.tests.test11.authservice.enums.Status;
 import wombatukun.tests.test11.authservice.exceptions.handlers.GlobalExceptionHandler;
 import wombatukun.tests.test11.authservice.services.UserService;
 import wombatukun.tests.test11.common.dto.CommonResponse;
@@ -58,9 +59,13 @@ public class UserController extends GlobalExceptionHandler {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping(value = "/users/{userId}")
-    public CommonResponse<UserDto> suspendAny(Authentication authentication, @PathVariable("userId") Long userId) {
-        return CommonResponse.success(userService.suspend(authentication, userId));
+    @PutMapping(value = "/users/{userId}/status")
+    public CommonResponse<UserDto> suspendAny(
+            Authentication authentication,
+            @PathVariable("userId") Long userId,
+            @RequestBody String status
+    ) {
+        return CommonResponse.success(userService.updateStatus(authentication, userId, Status.valueOf(status)));
     }
 
 }

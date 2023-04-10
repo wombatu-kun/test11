@@ -8,6 +8,6 @@ import wombatukun.tests.test11.queryservice.dto.UserStatDto;
 public interface UserMapper {
 
     UserStatDto mapProjectionToDto(UserStat userStat);
-    User mapEventToEntity(UserEvent event);
+    User mapEventToEntity(UserEvent event, User user);
 
 }

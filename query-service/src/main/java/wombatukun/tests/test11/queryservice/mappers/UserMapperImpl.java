@@ -27,9 +27,11 @@ public class UserMapperImpl implements UserMapper {
     }
 
     @Override
-    public User mapEventToEntity(UserEvent event) {
-        User user = new User();
-        user.setId(event.getId());
+    public User mapEventToEntity(UserEvent event, User user) {
+        if (user == null) {
+            user = new User();
+            user.setId(event.getId());
+        }
         user.setName(event.getName());
         user.setEmail(event.getEmail());
         user.setRole(event.getRole());

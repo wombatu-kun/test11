@@ -45,10 +45,10 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserDto suspend(Authentication authentication, Long id) {
+    public UserDto updateStatus(Authentication authentication, Long id, Status status) {
         User user = findUserById(id);
         if (!user.getEmail().equalsIgnoreCase(authentication.getPrincipal().toString())) {
-            user.setStatus(Status.SUSPENDED);
+            user.setStatus(status);
             user = userRepository.save(user);
             userEventPublisher.sendEvent(userMapper.mapEntityToEvent(user));
             return userMapper.mapEntityToDto(user);
