@@ -31,6 +31,8 @@ dependencies {
 	implementation "org.springframework.security.oauth:spring-security-oauth2:${oauth2Version}"
 	implementation "org.springframework.security:spring-security-oauth2-resource-server:${springVersion}"
 	implementation "org.springframework.kafka:spring-kafka"
+	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+	implementation 'org.springframework.cloud:spring-cloud-sleuth-zipkin'
 	implementation "org.springdoc:springdoc-openapi-ui:${swaggerVersion}"
 	implementation "io.micrometer:micrometer-core:${micrometerVersion}"
 	implementation "io.micrometer:micrometer-registry-prometheus:${micrometerVersion}"

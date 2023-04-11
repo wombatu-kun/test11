@@ -102,7 +102,7 @@ services:
       - KAFKA_ADVERTISED_HOST_NAME=kafka
       - KAFKA_ADVERTISED_PORT=9092
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-      - KAFKA_CREATE_TOPICS=users:1:1,orders:1:1
+      - KAFKA_CREATE_TOPICS=users:1:1,orders:1:1,zipkin:1:1
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     depends_on:
@@ -191,6 +191,20 @@ services:
       backend:
         aliases:
           - "grafana"
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    environment:
+      - "KAFKA_BOOTSTRAP_SERVERS=kafka:9092"
+    ports:
+      - "9411:9411"
+    depends_on:
+      - kafka
+    networks:
+      backend:
+        aliases:
+          - "zipkin"
+
 networks:
   backend:
     driver: bridge

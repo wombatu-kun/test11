@@ -8,3 +8,6 @@ spring:
     admin:
       client:
         url: http://adminserver:8089
+
+  zipkin:
+    baseUrl: http://zipkin:9411

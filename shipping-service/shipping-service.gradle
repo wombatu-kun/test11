@@ -33,6 +33,8 @@ dependencies {
 	implementation "org.springframework.kafka:spring-kafka"
 	implementation "org.springframework.data:spring-data-redis"
 	implementation "redis.clients:jedis"
+	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+	implementation 'org.springframework.cloud:spring-cloud-sleuth-zipkin'
 	implementation "io.micrometer:micrometer-core:${micrometerVersion}"
 	implementation "io.micrometer:micrometer-registry-prometheus:${micrometerVersion}"
 	implementation "org.springdoc:springdoc-openapi-ui:${swaggerVersion}"
