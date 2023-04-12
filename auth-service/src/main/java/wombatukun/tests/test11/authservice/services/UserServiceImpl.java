@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
             userEventPublisher.sendEvent(userMapper.mapEntityToEvent(user));
             return userMapper.mapEntityToDto(user);
         } else {
-            throw new OperationNotPermittedException("unable to suspend yourself");
+            throw new OperationNotPermittedException("unable to update your own status");
         }
     }
 

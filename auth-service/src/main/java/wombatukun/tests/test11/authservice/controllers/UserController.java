@@ -54,13 +54,13 @@ public class UserController extends GlobalExceptionHandler {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "/users/{userId}")
-    public CommonResponse<UserDto> getAny(@PathVariable("userId") Long userId) {
+    public CommonResponse<UserDto> getAnyUserById(@PathVariable("userId") Long userId) {
         return CommonResponse.success(userService.getById(userId));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(value = "/users/{userId}/status")
-    public CommonResponse<UserDto> suspendAny(
+    public CommonResponse<UserDto> updateStatus(
             Authentication authentication,
             @PathVariable("userId") Long userId,
             @RequestBody String status
