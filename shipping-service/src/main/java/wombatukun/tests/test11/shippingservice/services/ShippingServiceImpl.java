@@ -48,7 +48,7 @@ public class ShippingServiceImpl implements ShippingService {
     @Override
     @Transactional(readOnly = true)
     public List<ShippingDto> getShippingTrack(Long orderId) {
-        return shippingRepository.findAllByOrderIdOrOrderByWasAt(orderId).stream()
+        return shippingRepository.findAllByOrderIdOrderByWasAt(orderId).stream()
                 .map(shippingMapper::mapEntityToDto).collect(Collectors.toList());
     }
 

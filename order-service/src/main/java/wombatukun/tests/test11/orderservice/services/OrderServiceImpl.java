@@ -97,6 +97,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public DetailsDto assignOrder(Authentication authentication, Long orderId, AssignOrderForm form) {
         Order order = findOrderById(orderId);
+        //todo do not assign to users or inactive couriers (check form.courierId has ROLE_COURIER and is ACTIVE)
         if (Set.of(CREATED, ASSIGNED).contains(order.getStatus())) {
             order.setCourierId(form.getCourierId());
             order.setStatus(ASSIGNED);

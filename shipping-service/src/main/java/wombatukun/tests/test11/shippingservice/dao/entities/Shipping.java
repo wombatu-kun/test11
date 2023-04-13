@@ -1,5 +1,6 @@
 package wombatukun.tests.test11.shippingservice.dao.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +20,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "shipping")
 @IdClass(ShippingId.class)
+@AllArgsConstructor
 public class Shipping {
 
     @Id

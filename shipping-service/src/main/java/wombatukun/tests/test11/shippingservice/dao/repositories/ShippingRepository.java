@@ -12,6 +12,6 @@ import java.util.List;
 public interface ShippingRepository extends JpaRepository<Shipping, ShippingId> {
 
     @Query("select s from Shipping s where s.orderId = :orderId order by s.wasAt asc")
-    List<Shipping> findAllByOrderIdOrOrderByWasAt(Long orderId);
+    List<Shipping> findAllByOrderIdOrderByWasAt(Long orderId);
 
 }
