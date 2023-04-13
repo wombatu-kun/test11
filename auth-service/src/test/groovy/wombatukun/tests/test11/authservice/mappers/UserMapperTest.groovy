@@ -1,6 +1,5 @@
 package wombatukun.tests.test11.authservice.mappers
 
-import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification
@@ -20,22 +19,24 @@ class UserMapperTest extends Specification {
 	@Autowired
 	private UserMapper userMapper
 
-	private User user = new User(502L, new Date(), "user1", "user1@mail.com", "pw", Role.ROLE_USER, Status.SUSPENDED);
+	private User user = new User(502L, new Date(), "user1", "user1@mail.com", "pw", Role.ROLE_USER, Status.SUSPENDED)
 
 	def testMapFormToEntity() {
 		given:
-			UserForm form = new UserForm("user1", "user1@mail.com", "pw", Role.ROLE_USER);
+			UserForm form = new UserForm("user1", "user1@mail.com", "pw", Role.ROLE_USER)
 		when:
 			User user = userMapper.mapFormToEntity(form)
 			println user
 		then:
-			user.createdAt != null
-			user.password != null
-			user.password != form.password
-			user.status == Status.ACTIVE
-			user.name == form.name
-			user.email == form.email
-			user.role == form.role
+			verifyAll(user) {
+				user.createdAt != null
+				user.password != null
+				user.password != form.password
+				user.status == Status.ACTIVE
+				user.name == form.name
+				user.email == form.email
+				user.role == form.role
+			}
 	}
 
 	def testMapEntityToDto() {
@@ -43,13 +44,15 @@ class UserMapperTest extends Specification {
 			UserDto dto = userMapper.mapEntityToDto(user)
 			println dto
 		then:
-			dto.id == user.getId()
-			dto.createdAt == user.getCreatedAt()
-			dto.password == null
-			dto.status == user.status
-			dto.name == user.name
-			dto.email == user.email
-			dto.role == user.role
+			verifyAll(dto) {
+				dto.id == user.id
+				dto.createdAt == user.createdAt
+				dto.password == null
+				dto.status == user.status
+				dto.name == user.name
+				dto.email == user.email
+				dto.role == user.role
+			}
 	}
 
 	def testMapEntityToEvent() {

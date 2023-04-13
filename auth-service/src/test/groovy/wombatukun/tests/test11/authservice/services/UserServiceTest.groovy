@@ -34,7 +34,7 @@ class UserServiceTest extends Specification {
 	def testRegisterSuccess() {
 		given:
 			UserService userService = new UserServiceImpl(userRepository, userMapper, userEventPublisher)
-			UserForm form = new UserForm("user1", "user1@mail.com", "pw", Role.ROLE_USER);
+			UserForm form = new UserForm("user1", "user1@mail.com", "pw", Role.ROLE_USER)
 		when:
 			UserDto result = userService.register(form)
 			println result
@@ -46,7 +46,7 @@ class UserServiceTest extends Specification {
 	def testRegisterConflict() {
 		given:
 			UserService userService = new UserServiceImpl(userRepository, userMapper, userEventPublisher)
-			UserForm form = new UserForm("user2", "admin@company.com", "pw", Role.ROLE_USER);
+			UserForm form = new UserForm("user2", "admin@company.com", "pw", Role.ROLE_USER)
 		when:
 			userService.register(form)
 		then:
@@ -90,12 +90,14 @@ class UserServiceTest extends Specification {
 		when:
 			List<UserCount> result = userService.countTotalsByRoles()
 		then:
-			!result.isEmpty()
-			result.size() == 2
-			result.get(0).role == Role.ROLE_ADMIN
-			result.get(0).count == 1
-			result.get(1).role == Role.ROLE_USER
-			result.get(1).count == 1
+			verifyAll(result) {
+				!result.isEmpty()
+				result.size() == 2
+				result.get(0).role == Role.ROLE_ADMIN
+				result.get(0).count == 1
+				result.get(1).role == Role.ROLE_USER
+				result.get(1).count == 1
+			}
 	}
 
 	def testUpdateStatusSuccess() {
@@ -109,8 +111,10 @@ class UserServiceTest extends Specification {
 			println result
 		then:
 		1 * userEventPublisher.sendEvent(_)
-		result.id == 2L
-		result.getStatus() == Status.SUSPENDED
+		verifyAll(result) {
+			result.id == 2L
+			result.getStatus() == Status.SUSPENDED
+		}
 	}
 
 	def testUpdateStatusFailure() {

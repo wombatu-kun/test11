@@ -15,7 +15,7 @@ public class OrderEventListener {
 
     private final CacheService cacheService;
 
-    @KafkaListener(topics="${spring.kafka.template.default-topic}", groupId = "${spring.kafka.consumer.group-id}")
+    @KafkaListener(topics="${spring.kafka.template.default-topic:orders}", groupId = "${spring.kafka.consumer.group-id:shipping-group}")
     public void handle(OrderEvent event) {
         log.debug("Received order-event: {}", event);
         switch (event.getStatus()) {

@@ -14,7 +14,7 @@ public class UserEventListener {
 
     private final UserService userService;
 
-    @KafkaListener(topics="${spring.kafka.consumer.user-topic}", groupId = "${spring.kafka.consumer.group-id}")
+    @KafkaListener(topics="${spring.kafka.consumer.user-topic:users}", groupId = "${spring.kafka.consumer.group-id:query-group}")
     public void handle(UserEvent event) {
         log.debug("Received user-event: {}", event);
         userService.handleEvent(event);
