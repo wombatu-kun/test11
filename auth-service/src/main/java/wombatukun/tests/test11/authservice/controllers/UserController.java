@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import wombatukun.tests.test11.authservice.dto.UserDto;
 import wombatukun.tests.test11.authservice.dto.UserForm;
-import wombatukun.tests.test11.authservice.enums.Role;
 import wombatukun.tests.test11.authservice.enums.Status;
 import wombatukun.tests.test11.authservice.exceptions.handlers.GlobalExceptionHandler;
 import wombatukun.tests.test11.authservice.services.UserService;
 import wombatukun.tests.test11.common.dto.CommonResponse;
+import wombatukun.tests.test11.common.security.Role;
 
 import javax.validation.Valid;
 import java.util.HashMap;

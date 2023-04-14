@@ -7,10 +7,10 @@ import spock.lang.Subject
 import wombatukun.tests.test11.authservice.dao.entities.User
 import wombatukun.tests.test11.authservice.dto.UserDto
 import wombatukun.tests.test11.authservice.dto.UserForm
-import wombatukun.tests.test11.authservice.enums.Role
+
 import wombatukun.tests.test11.authservice.enums.Status
-import wombatukun.tests.test11.authservice.mappers.UserMapper
 import wombatukun.tests.test11.common.messaging.UserEvent
+import wombatukun.tests.test11.common.security.Role
 
 @SpringBootTest
 class UserMapperTest extends Specification {

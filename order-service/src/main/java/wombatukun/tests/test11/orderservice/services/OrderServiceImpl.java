@@ -10,12 +10,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import wombatukun.tests.test11.common.dto.PageDto;
+import wombatukun.tests.test11.common.enums.UserStatus;
 import wombatukun.tests.test11.common.exceptions.OperationNotPermittedException;
 import wombatukun.tests.test11.common.exceptions.ResourceNotFoundException;
 import wombatukun.tests.test11.common.security.AuthInfo;
 import wombatukun.tests.test11.common.security.Role;
 import wombatukun.tests.test11.orderservice.dao.entities.Details;
 import wombatukun.tests.test11.orderservice.dao.entities.Order;
+import wombatukun.tests.test11.orderservice.dao.entities.UserCache;
 import wombatukun.tests.test11.orderservice.dao.projections.OrderCount;
 import wombatukun.tests.test11.orderservice.dao.repositories.DetailsRepository;
 import wombatukun.tests.test11.orderservice.dao.repositories.OrderRepository;
@@ -46,6 +48,7 @@ public class OrderServiceImpl implements OrderService {
     private final DetailsRepository detailsRepository;
     private final OrderMapper orderMapper;
     private final OrderEventPublisher orderEventPublisher;
+    private final UserService userService;
 
     @Transactional(readOnly = true)
     @Override
@@ -97,20 +100,26 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public DetailsDto assignOrder(Authentication authentication, Long orderId, AssignOrderForm form) {
         Order order = findOrderById(orderId);
-        //todo do not assign to users or inactive couriers (check form.courierId has ROLE_COURIER and is ACTIVE)
+        String errorMsg;
         if (Set.of(CREATED, ASSIGNED).contains(order.getStatus())) {
-            order.setCourierId(form.getCourierId());
-            order.setStatus(ASSIGNED);
-            if (form.getCost() != null) {
-                Details details = order.getDetails();
-                details.setCost(form.getCost());
+            UserCache user = userService.getUser(form.getCourierId());
+            if (user != null && user.getRole() == Role.ROLE_COURIER && user.getStatus() == UserStatus.ACTIVE) {
+                order.setCourierId(form.getCourierId());
+                order.setStatus(ASSIGNED);
+                if (form.getCost() != null) {
+                    Details details = order.getDetails();
+                    details.setCost(form.getCost());
+                }
+                order = orderRepository.save(order);
+                orderEventPublisher.sendEvent(orderMapper.mapEntityToEvent(order));
+                return orderMapper.mapEntityToDetailsDto(order);
+            } else {
+                errorMsg = "no active courier with id=" + form.getCourierId();
             }
-            order = orderRepository.save(order);
-            orderEventPublisher.sendEvent(orderMapper.mapEntityToEvent(order));
-            return orderMapper.mapEntityToDetailsDto(order);
         }  else {
-            throw new OperationNotPermittedException("unable to reassign this order");
+            errorMsg = "unable to reassign this order";
         }
+        throw new OperationNotPermittedException(errorMsg);
     }
 
     @Override
@@ -131,7 +140,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderDto updateStatus(Authentication authentication, Long orderId, Status status) {
-        Assert.notNull(status, "new Status must not be null");
+        Assert.notNull(status, "new status must not be null");
         Order order = findOrderById(orderId);
         AuthInfo auth = AuthInfo.fromAuthentication(authentication);
         switch (auth.getRole()) {

@@ -4,35 +4,35 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import wombatukun.tests.test11.shippingservice.dao.entities.AssignmentCache;
-import wombatukun.tests.test11.shippingservice.dao.repositories.CacheRepository;
+import wombatukun.tests.test11.shippingservice.dao.repositories.AssignmentCacheRepository;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CacheServiceImpl implements CacheService {
+public class AssignmentCacheServiceImpl implements AssignmentCacheService {
 
-    private final CacheRepository cacheRepository;
+    private final AssignmentCacheRepository assignmentCacheRepository;
 
     public AssignmentCache getCache(Long orderId) {
         try {
-            return cacheRepository.findById(orderId).orElse(null);
+            return assignmentCacheRepository.findById(orderId).orElse(null);
         } catch (Exception ex){
-            log.error("Error trying to retrieve assignment by orderId={}. Exception {}", orderId, ex);
+            log.error("Error trying to retrieve assignmentCache by orderId={}. Exception {}", orderId, ex);
             return null;
         }
     }
 
     public void deleteCache(Long orderId) {
         try {
-            cacheRepository.deleteById(orderId);
+            assignmentCacheRepository.deleteById(orderId);
         } catch (Exception ex){
-            log.error("Unable to delete assignment with orderId={}. Exception {}", orderId, ex);
+            log.error("Unable to delete assignmentCache with orderId={}. Exception {}", orderId, ex);
         }
     }
 
     public void saveCache(AssignmentCache assignment) {
         try {
-            cacheRepository.save(assignment);
+            assignmentCacheRepository.save(assignment);
         } catch (Exception ex){
             log.error("Unable to cache assignment with orderId={}. Exception {}", assignment.getOrderId(), ex);
         }

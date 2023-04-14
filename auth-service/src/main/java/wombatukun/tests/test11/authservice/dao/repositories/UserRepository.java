@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import wombatukun.tests.test11.authservice.dao.entities.User;
 import wombatukun.tests.test11.authservice.dao.projections.UserCount;
-import wombatukun.tests.test11.authservice.enums.Role;
+import wombatukun.tests.test11.common.security.Role;
 
 import java.util.List;
 

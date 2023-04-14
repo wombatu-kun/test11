@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
-import wombatukun.tests.test11.authservice.enums.Role;
 import wombatukun.tests.test11.authservice.enums.Status;
+import wombatukun.tests.test11.common.security.Role;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

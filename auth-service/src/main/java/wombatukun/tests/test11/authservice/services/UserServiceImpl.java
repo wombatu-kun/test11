@@ -11,13 +11,13 @@ import wombatukun.tests.test11.authservice.dao.projections.UserCount;
 import wombatukun.tests.test11.authservice.dao.repositories.UserRepository;
 import wombatukun.tests.test11.authservice.dto.UserDto;
 import wombatukun.tests.test11.authservice.dto.UserForm;
-import wombatukun.tests.test11.authservice.enums.Role;
 import wombatukun.tests.test11.authservice.enums.Status;
 import wombatukun.tests.test11.authservice.mappers.UserMapper;
 import wombatukun.tests.test11.authservice.messaging.UserEventPublisher;
 import wombatukun.tests.test11.common.exceptions.OperationNotPermittedException;
 import wombatukun.tests.test11.common.exceptions.RegistrationNotAllowedException;
 import wombatukun.tests.test11.common.exceptions.ResourceNotFoundException;
+import wombatukun.tests.test11.common.security.Role;
 
 import java.util.List;
 

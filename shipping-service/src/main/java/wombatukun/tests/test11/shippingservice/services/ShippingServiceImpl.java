@@ -25,7 +25,7 @@ public class ShippingServiceImpl implements ShippingService {
 
     private final ShippingRepository shippingRepository;
     private final ShippingMapper shippingMapper;
-    private final CacheService cacheService;
+    private final AssignmentCacheService assignmentCacheService;
 
     @Override
     @Transactional
@@ -33,7 +33,7 @@ public class ShippingServiceImpl implements ShippingService {
         AuthInfo authInfo = AuthInfo.fromAuthentication(authentication);
         Set<Shipping> shippingSet = new HashSet<>();
         for (Long orderId: dto.getOrderIds()) {
-            AssignmentCache assignmentCache = cacheService.getCache(orderId);
+            AssignmentCache assignmentCache = assignmentCacheService.getCache(orderId);
             log.debug("looking for order {} assignment in cache: {}", orderId, assignmentCache);
             if (assignmentCache != null && authInfo.getId().equals(assignmentCache.getCourierId())) {
                 Shipping shipping = shippingMapper.mapFormToEntity(orderId, authInfo.getId(), dto);

@@ -28,7 +28,7 @@ class ShippingServiceTest extends Specification {
 		given:
 			Date date1 = new Date()
 			Long courierId = 2L
-			CacheService cacheService = Stub()
+			AssignmentCacheService cacheService = Stub()
 			cacheService.getCache(70) >> new AssignmentCache(70L, courierId)
 			cacheService.getCache(71) >> null
 			cacheService.getCache(72) >> new AssignmentCache(72L, 3L)
@@ -75,7 +75,7 @@ class ShippingServiceTest extends Specification {
 			Long order1 = 70L
 			Long order2 = 72L
 			Long order3 = 73L
-			CacheService cacheService = Mock()
+			AssignmentCacheService cacheService = Mock()
 			ShippingService shippingService = new ShippingServiceImpl(shippingRepository, shippingMapper, cacheService)
 		when:
 			List<ShippingDto> order1Track = shippingService.getShippingTrack(order1)

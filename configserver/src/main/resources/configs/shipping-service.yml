@@ -31,9 +31,8 @@ spring:
   kafka:
     bootstrap-servers:
       - localhost:9092
-    template:
-      default-topic: orders
     consumer:
+      order-topic: orders
       group-id: shipping-group
       auto-offset-reset: earliest
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer

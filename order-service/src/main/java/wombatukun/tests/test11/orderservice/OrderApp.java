@@ -8,8 +8,11 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
@@ -17,6 +20,7 @@ import wombatukun.tests.test11.common.security.JWTUtil;
 import wombatukun.tests.test11.common.usercontext.UserContextInterceptor;
 import wombatukun.tests.test11.orderservice.exceptions.handlers.CustomAsyncExceptionHandler;
 
+import java.io.IOException;
 import java.util.Locale;
 
 @SpringBootApplication
@@ -41,6 +45,12 @@ public class OrderApp implements AsyncConfigurer {
 	public RestTemplate restTemplate(){
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.getInterceptors().add(new UserContextInterceptor());
+		restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
+			@Override
+			public void handleError(ClientHttpResponse response) {
+				//mute exceptions, look at StatusCode
+			}
+		});
 		return restTemplate;
 	}
 
