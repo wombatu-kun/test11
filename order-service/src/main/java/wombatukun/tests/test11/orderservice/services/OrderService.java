@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface OrderService {
 
-    List<OrderCount> countTotalsByStates();
+    List<OrderCount> countTotalsByStatuses();
     PageDto<OrderDto> search(Authentication authentication, SearchOrderForm form);
     DetailsDto getOrderDetailsById(Authentication authentication, Long orderId);
     DetailsDto createOrder(Authentication authentication, UserOrderForm form);

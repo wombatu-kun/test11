@@ -52,7 +52,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<OrderCount> countTotalsByStates() {
+    public List<OrderCount> countTotalsByStatuses() {
         return orderRepository.countTotalsByStatuses();
     }
 
@@ -79,6 +79,7 @@ public class OrderServiceImpl implements OrderService {
         } else if (auth.getRole() == Role.ROLE_COURIER) {
             form.setCourierId(auth.getId());
         }
+        log.debug("form: {}", form);
         OrderSpec spec = orderMapper.mapSearchFormToSpec(form);
         Pageable pageable = PageRequest.of(form.getPage(), form.getPageSize());
         Page<Order> orders = orderRepository.findAll(spec, pageable);
@@ -139,6 +140,21 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
+    public OrderDto cancelOrder(Authentication authentication, Long orderId) {
+        Order order = findOrderById(orderId);
+        AuthInfo auth = AuthInfo.fromAuthentication(authentication);
+        if (auth.getId().equals(order.getUserId()) && Set.of(CREATED, ASSIGNED).contains(order.getStatus())) {
+            order.setStatus(Status.CANCELLED);
+            order = orderRepository.save(order);
+            orderEventPublisher.sendEvent(orderMapper.mapEntityToEvent(order));
+            return orderMapper.mapEntityToOrderDto(order);
+        } else {
+            throw new OperationNotPermittedException("unable to cancel this order");
+        }
+    }
+
+    @Override
+    @Transactional
     public OrderDto updateStatus(Authentication authentication, Long orderId, Status status) {
         Assert.notNull(status, "new status must not be null");
         Order order = findOrderById(orderId);
@@ -172,21 +188,6 @@ public class OrderServiceImpl implements OrderService {
             return orderRepository.save(order);
         } else {
             throw new OperationNotPermittedException("unable to update status");
-        }
-    }
-
-    @Override
-    @Transactional
-    public OrderDto cancelOrder(Authentication authentication, Long orderId) {
-        Order order = findOrderById(orderId);
-        AuthInfo auth = AuthInfo.fromAuthentication(authentication);
-        if (auth.getId().equals(order.getUserId()) && Set.of(CREATED, ASSIGNED).contains(order.getStatus())) {
-            order.setStatus(Status.CANCELLED);
-            order = orderRepository.save(order);
-            orderEventPublisher.sendEvent(orderMapper.mapEntityToEvent(order));
-            return orderMapper.mapEntityToOrderDto(order);
-        } else {
-            throw new OperationNotPermittedException("unable to cancel this order");
         }
     }
 

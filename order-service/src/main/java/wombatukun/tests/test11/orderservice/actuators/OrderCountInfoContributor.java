@@ -20,7 +20,7 @@ public class OrderCountInfoContributor implements InfoContributor {
     @Override
     public void contribute(Info.Builder builder) {
         Map<String, Object> statsMap = new HashMap<>();
-        List<OrderCount> totals = orderService.countTotalsByStates();
+        List<OrderCount> totals = orderService.countTotalsByStatuses();
         totals.forEach(total -> statsMap.put(total.getStatus().name(), total.getCount()));
         builder.withDetail("order-stats", statsMap);
     }

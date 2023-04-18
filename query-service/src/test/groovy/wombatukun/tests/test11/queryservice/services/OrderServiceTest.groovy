@@ -20,25 +20,25 @@ class OrderServiceTest extends Specification {
 
 	def testHandleEvent() {
 		given:
-			OrderEvent event = OrderEvent.builder()
-					.type(OrderEvent.class.name)
-					.id(1L)
-					.cost(BigDecimal.valueOf(4000L))
-					.userId(2L)
-					.courierId(4L)
-					.timestamp(new Date())
-					.status(OrderStatus.ASSIGNED)
-					.correlationId("cor-id")
-					.build()
+		OrderEvent event = OrderEvent.builder()
+				.type(OrderEvent.class.name)
+				.id(1L)
+				.cost(BigDecimal.valueOf(4000L))
+				.userId(2L)
+				.courierId(4L)
+				.timestamp(new Date())
+				.status(OrderStatus.ASSIGNED)
+				.correlationId("cor-id")
+				.build()
 		when:
-			orderService.handleEvent(event)
-			Order order = orderRepository.findById(event.id).orElse(null)
+		orderService.handleEvent(event)
+		Order order = orderRepository.findById(event.id).orElse(null)
 		then:
-			verifyAll(order) {
-				order != null
-				order.assignedAt != null
-				order.cost == event.cost
-			}
+		verifyAll(order) {
+			order != null
+			order.assignedAt != null
+			order.cost == event.cost
+		}
 	}
 
 }

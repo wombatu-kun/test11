@@ -11,7 +11,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
@@ -34,6 +33,8 @@ public class UserServiceImpl implements UserService {
     private final RestTemplate restTemplate;
     private final Tracer tracer;
 
+    @Value("${auth.service-id:auth-service}")
+    private String serviceId;
     @Value("${auth.instance}")
     private String authInstance;
     @Value("${auth.user-path:v1/users}")
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserCache getUser(Long id) {
-        //3 spans just for demonstration of distributed tracing with Zipkin
+        //3 custom spans for demonstration of distributed tracing with Zipkin
         ScopedSpan span = tracer.startScopedSpan("read-user-cache-from-redis");
         UserCache cache = getUserCache(id);
         finishSpan(span, "redis", "read cache");
@@ -74,9 +75,10 @@ public class UserServiceImpl implements UserService {
     }
 
     private UserCache getUserFromAuthService(Long id) {
-        List<ServiceInstance> authInstances = discoveryClient.getInstances("auth-service");
+        List<ServiceInstance> authInstances = discoveryClient.getInstances(serviceId);
         String serviceUri = String.format("%s/%s/%d",
                 authInstances.isEmpty() ? authInstance : authInstances.get(0).getUri().toString(), userPath, id);
+        log.debug("auth-service uri: {}", serviceUri);
         ResponseEntity<CommonResponse<UserDto>> response;
         try {
             response = restTemplate.exchange(serviceUri, HttpMethod.GET,
@@ -87,7 +89,7 @@ public class UserServiceImpl implements UserService {
         log.debug("Auth-service response: {}", response);
         if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null && response.getBody().getContent() != null) {
             UserDto user = response.getBody().getContent();
-            return new UserCache(user.getId(), user.getRole(), UserStatus.valueOf(user.getStatus().name()));
+            return new UserCache(user.getId(), user.getRole(), user.getStatus());
         } else {
             if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
                 throw new ResourceNotFoundException("no courier with id=" + id);
@@ -98,16 +100,10 @@ public class UserServiceImpl implements UserService {
     }
 
     private void finishSpan(ScopedSpan span, String serviceTag, String anno) {
-        span.tag("peer.service", serviceTag);
-        span.annotate(anno);
-        span.finish();
-    }
-
-    private void deleteCache(Long id) {
-        try {
-            userCacheRepository.deleteById(id);
-        } catch (Exception ex){
-            log.error("unable to delete userCahce with id={}, exception {}", id, ex);
+        if (span != null) {
+            span.tag("peer.service", serviceTag);
+            span.annotate(anno);
+            span.finish();
         }
     }
 

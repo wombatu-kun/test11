@@ -30,6 +30,7 @@ logging:
     wombatukun: DEBUG
 
 auth:
+  service-id: auth-service
   instance: http://localhost:8083
   user-path: v1/users
   signing-key: QnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeX

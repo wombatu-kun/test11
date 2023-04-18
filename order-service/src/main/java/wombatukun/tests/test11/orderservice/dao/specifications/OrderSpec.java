@@ -1,5 +1,6 @@
 package wombatukun.tests.test11.orderservice.dao.specifications;
 
+import lombok.Getter;
 import org.springframework.data.jpa.domain.Specification;
 import wombatukun.tests.test11.orderservice.dao.entities.Order;
 import wombatukun.tests.test11.orderservice.dao.queries.OrderQuery;
@@ -9,6 +10,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+@Getter
 public class OrderSpec implements Specification<Order> {
 
 	private OrderQuery query;

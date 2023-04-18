@@ -37,23 +37,23 @@ class AuthServiceTest extends Specification {
 
 	def "admin authentication"() {
 		when:
-			def response = mvc.perform(
-					post("/oauth/token").
-							with(httpBasic(authConfig.client, authConfig.secret))
-							.param("grant_type", "password")
-							.param("username", "admin@company.com")
-							.param("password", "password")
-			)
-					.andReturn().response
-			def content = new JsonSlurper().parseText(response.contentAsString)
-			println content
-			accessToken = (String) content.access_token
-			println accessToken
+		def response = mvc.perform(
+				post("/oauth/token").
+						with(httpBasic(authConfig.client, authConfig.secret))
+						.param("grant_type", "password")
+						.param("username", "admin@company.com")
+						.param("password", "password")
+		)
+				.andReturn().response
+		def content = new JsonSlurper().parseText(response.contentAsString)
+		println content
+		accessToken = (String) content.access_token
+		println accessToken
 		then:
-			response.status == 200
-			assert content instanceof Map
-			content.access_token != null
-			content.user_id == 1
+		response.status == 200
+		assert content instanceof Map
+		content.access_token != null
+		content.user_id == 1
 	}
 
 	def "ok for UserController.me"() {
@@ -66,15 +66,15 @@ class AuthServiceTest extends Specification {
 
 	def testGetAnyUserById() {
 		when:
-			def response = mvc.perform(
-					get("/v1/users/{id}", "1").header("Authorization", "Bearer ${accessToken}"))
-					.andReturn().response
-			def content = new JsonSlurper().parseText(response.contentAsString)
-			println content
+		def response = mvc.perform(
+				get("/v1/users/{id}", "1").header("Authorization", "Bearer ${accessToken}"))
+				.andReturn().response
+		def content = new JsonSlurper().parseText(response.contentAsString)
+		println content
 		then:
-			content.content != null
-			content.error == null
-			content.content.id == 1
+		content.content != null
+		content.error == null
+		content.content.id == 1
 	}
 
 }

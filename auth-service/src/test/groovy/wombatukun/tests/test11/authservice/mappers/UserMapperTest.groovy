@@ -23,50 +23,50 @@ class UserMapperTest extends Specification {
 
 	def testMapFormToEntity() {
 		given:
-			UserForm form = new UserForm("user1", "user1@mail.com", "pw", Role.ROLE_USER)
+		UserForm form = new UserForm("user1", "user1@mail.com", "pw", Role.ROLE_USER)
 		when:
-			User user = userMapper.mapFormToEntity(form)
-			println user
+		User user = userMapper.mapFormToEntity(form)
+		println user
 		then:
-			verifyAll(user) {
-				user.createdAt != null
-				user.password != null
-				user.password != form.password
-				user.status == Status.ACTIVE
-				user.name == form.name
-				user.email == form.email
-				user.role == form.role
-			}
+		verifyAll(user) {
+			user.createdAt != null
+			user.password != null
+			user.password != form.password
+			user.status == Status.ACTIVE
+			user.name == form.name
+			user.email == form.email
+			user.role == form.role
+		}
 	}
 
 	def testMapEntityToDto() {
 		when:
-			UserDto dto = userMapper.mapEntityToDto(user)
-			println dto
+		UserDto dto = userMapper.mapEntityToDto(user)
+		println dto
 		then:
-			verifyAll(dto) {
-				dto.id == user.id
-				dto.createdAt == user.createdAt
-				dto.password == null
-				dto.status == user.status
-				dto.name == user.name
-				dto.email == user.email
-				dto.role == user.role
-			}
+		verifyAll(dto) {
+			dto.id == user.id
+			dto.createdAt == user.createdAt
+			dto.password == null
+			dto.status == user.status
+			dto.name == user.name
+			dto.email == user.email
+			dto.role == user.role
+		}
 	}
 
 	def testMapEntityToEvent() {
 		when:
-			UserEvent event = userMapper.mapEntityToEvent(user)
-			println event
+		UserEvent event = userMapper.mapEntityToEvent(user)
+		println event
 		then:
-			event.type == UserEvent.class.getTypeName()
-			event.id == user.getId()
-			event.timestamp != null
-			event.status.name() == user.status.name()
-			event.name == user.name
-			event.email == user.email
-			event.role.name() == user.role.name()
+		event.type == UserEvent.class.getTypeName()
+		event.id == user.getId()
+		event.timestamp != null
+		event.status.name() == user.status.name()
+		event.name == user.name
+		event.email == user.email
+		event.role.name() == user.role.name()
 	}
 
 }

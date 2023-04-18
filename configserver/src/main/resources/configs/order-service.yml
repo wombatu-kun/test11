@@ -70,6 +70,7 @@ eureka:
       defaultZone: http://localhost:8082/eureka/
 
 auth:
+  service-id: auth-service
   instance: http://localhost:8083
   user-path: v1/users
   signing-key: '{cipher}455d952fd23bcadf31fe76b2fbede0ac1a25cbe0fb179c9fa2a2c8b36a2ebfc4a345db1b91000109dbe47e0f1eb776c08b15fab2d4367492116286633d9da3a5'

@@ -28,4 +28,11 @@ public class SearchOrderForm {
 	private Integer pageSize = 30;
 	private Sort.Direction sortDirection = Sort.Direction.DESC;
 
+	public SearchOrderForm(Long userId, Long courierId, Date createdFrom, Date createdTo, Status status) {
+		this.userId = userId;
+		this.courierId = courierId;
+		this.createdFrom = createdFrom;
+		this.createdTo = createdTo;
+		this.status = status;
+	}
 }

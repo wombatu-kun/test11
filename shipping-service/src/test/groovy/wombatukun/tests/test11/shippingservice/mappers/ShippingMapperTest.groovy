@@ -17,27 +17,27 @@ class ShippingMapperTest extends Specification {
 
 	def testMapEntityToDto() {
 		given:
-			Shipping shipping = new Shipping(1L, new Date(), 7L, 4d, 2d)
+		Shipping shipping = new Shipping(1L, new Date(), 7L, 4d, 2d)
 		when:
-			ShippingDto dto = shippingMapper.mapEntityToDto(shipping)
-			println dto
+		ShippingDto dto = shippingMapper.mapEntityToDto(shipping)
+		println dto
 		then:
-			verifyAll(dto) {
-				dto.courierId == shipping.courierId
-				dto.wasAt == shipping.wasAt
-				dto.latitude == shipping.latitude
-				dto.longitude == shipping.longitude
-			}
+		verifyAll(dto) {
+			dto.courierId == shipping.courierId
+			dto.wasAt == shipping.wasAt
+			dto.latitude == shipping.latitude
+			dto.longitude == shipping.longitude
+		}
 	}
 
 	def testMapFormToEntity() {
 		given:
-			Long orderId = 34L
-			Long courierId = 55L
-			ShippingForm form = new ShippingForm(Set.of(orderId, 99L), new Date(), 8d, 12d)
+		Long orderId = 34L
+		Long courierId = 55L
+		ShippingForm form = new ShippingForm(Set.of(orderId, 99L), new Date(), 8d, 12d)
 		when:
-			Shipping shipping = shippingMapper.mapFormToEntity(orderId, courierId, form)
-			println shipping
+		Shipping shipping = shippingMapper.mapFormToEntity(orderId, courierId, form)
+		println shipping
 		then:
 		verifyAll(shipping) {
 			shipping.orderId == orderId
