@@ -37,8 +37,8 @@ public class SecurityConfiguration {
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
                 .pathMatchers(HttpMethod.POST, "/auth-service/v1/users").permitAll()
-                .pathMatchers("/auth-service/oauth/token").permitAll()
-                .pathMatchers("/actuator/**").permitAll()
+                .pathMatchers(HttpMethod.POST,"/auth-service/oauth/token").permitAll()
+                .pathMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                 .anyExchange().authenticated()
                 .and().build();
     }
