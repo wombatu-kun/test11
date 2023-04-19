@@ -22,6 +22,7 @@ import wombatukun.tests.test11.common.security.Role;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,6 +50,11 @@ public class UserController extends GlobalExceptionHandler {
         Map<String, Object> userInfo = new HashMap<>();
         userInfo.put("user", authentication.getPrincipal());
         userInfo.put("authorities", AuthorityUtils.authorityListToSet(authentication.getAuthorities()));
+        try {
+            TimeUnit.SECONDS.sleep(4);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return CommonResponse.success(userInfo);
     }
 

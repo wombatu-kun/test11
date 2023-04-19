@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import wombatukun.tests.test11.common.dto.CommonResponse;
-import wombatukun.tests.test11.common.enums.UserStatus;
 import wombatukun.tests.test11.common.exceptions.ResourceNotFoundException;
 import wombatukun.tests.test11.orderservice.dao.entities.UserCache;
 import wombatukun.tests.test11.orderservice.dao.repositories.UserCacheRepository;
@@ -56,8 +55,11 @@ public class UserServiceImpl implements UserService {
         finishSpan(span, "redis", "read cache");
         if (cache == null) {
             span = tracer.startScopedSpan("read-user-from-auth-service");
-            cache = getUserFromAuthService(id);
-            finishSpan(span, "auth-service", "get user");
+            try {
+                cache = getUserFromAuthService(id);
+            } finally {
+                finishSpan(span, "auth-service", "get user");
+            }
             span = tracer.startScopedSpan("save-user-cache-to-redis");
             saveUserCache(cache);
             finishSpan(span, "redis", "save cache");

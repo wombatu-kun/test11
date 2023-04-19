@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import static wombatukun.tests.test11.gateway.filters.FilterUtils.*;
+import static wombatukun.tests.test11.gateway.filters.FilterUtils.CORRELATION_ID;
+import static wombatukun.tests.test11.gateway.filters.FilterUtils.getCorrelationId;
 
 @Slf4j
 @Component
@@ -21,7 +22,6 @@ public class PostFilter implements GlobalFilter {
             String correlationId = getCorrelationId(requestHeaders);
             log.debug("Adding the {}={} to the outbound headers", CORRELATION_ID, correlationId);
             exchange.getResponse().getHeaders().add(CORRELATION_ID, correlationId);
-            log.debug("Completing outgoing request for {}", exchange.getRequest().getURI());
         }));
     }
 
