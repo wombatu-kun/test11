@@ -20,72 +20,14 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
-  configserver:
-    image: wk-delivery-app/configserver:0.0.1-SNAPSHOT
+  redis:
+    image: redis:alpine
     ports:
-       - "8081:8081"
-    environment:
-      SPRING_PROFILES_ACTIVE: "docker"
-      ENCRYPT_KEY: "xnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeL"
+      - 6379:6379
     networks:
       backend:
         aliases:
-          - "configserver"
-  eurekaserver:
-    image: wk-delivery-app/eurekaserver:0.0.1-SNAPSHOT
-    ports:
-      - "8082:8082"
-    environment:
-      SPRING_PROFILES_ACTIVE: "docker"
-    networks:
-      backend:
-        aliases:
-          - "eurekaserver"
-  adminserver:
-    image: wk-delivery-app/adminserver:0.0.1-SNAPSHOT
-    ports:
-      - "8089:8089"
-    environment:
-      SPRING_PROFILES_ACTIVE: "docker"
-      ENCRYPT_KEY: "xnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeL"
-    depends_on:
-      - configserver
-      - eurekaserver
-    networks:
-      backend:
-        aliases:
-          - "adminserver"
-  auth-service:
-    image: wk-delivery-app/auth-service:0.0.1-SNAPSHOT
-    environment:
-      SPRING_PROFILES_ACTIVE: "docker"
-      ENCRYPT_KEY: "xnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeL"
-    depends_on:
-      - database
-      - configserver
-      - eurekaserver
-    restart: on-failure
-    ports:
-      - "8083:8083"
-    networks:
-      backend:
-        aliases:
-          - "auth-service"
-  gatewayserver:
-    image: wk-delivery-app/gatewayserver:0.0.1-SNAPSHOT
-    ports:
-      - "8080:8080"
-    environment:
-      SPRING_PROFILES_ACTIVE: "docker"
-      ENCRYPT_KEY: "xnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeL"
-    depends_on:
-      - configserver
-      - eurekaserver
-      - auth-service
-    networks:
-      backend:
-        aliases:
-          - "gatewayserver"
+          - "redis"
   zookeeper:
     image: wurstmeister/zookeeper:latest
     ports:
@@ -111,16 +53,64 @@ services:
       backend:
         aliases:
           - "kafka"
-  redis:
-    image: redis:alpine
+  configserver:
+    image: wk-delivery-app/configserver:0.0.1-SNAPSHOT
     ports:
-      - 6379:6379
+       - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: "native,docker"
+      ENCRYPT_KEY: "xnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeL"
     networks:
       backend:
         aliases:
-          - "redis"
-  order-service:
-    image: wk-delivery-app/order-service:0.0.1-SNAPSHOT
+          - "configserver"
+  eurekaserver:
+    image: wk-delivery-app/eurekaserver:0.0.1-SNAPSHOT
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+    depends_on:
+      - configserver
+    restart: on-failure
+    networks:
+      backend:
+        aliases:
+          - "eurekaserver"
+  adminserver:
+    image: wk-delivery-app/adminserver:0.0.1-SNAPSHOT
+    ports:
+      - "8089:8089"
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+      ENCRYPT_KEY: "xnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeL"
+    depends_on:
+      - configserver
+    restart: on-failure
+    networks:
+      backend:
+        aliases:
+          - "adminserver"
+  gatewayserver:
+    image: wk-delivery-app/gatewayserver:0.0.1-SNAPSHOT
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+      ENCRYPT_KEY: "xnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeL"
+    depends_on:
+      - configserver
+      - eurekaserver
+      - redis
+    restart: on-failure
+    networks:
+      backend:
+        aliases:
+          - "gatewayserver"
+  auth-service:
+    image: wk-delivery-app/auth-service:0.0.1-SNAPSHOT
+    ports:
+      - "8083:8083"
     environment:
       SPRING_PROFILES_ACTIVE: "docker"
       ENCRYPT_KEY: "xnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeL"
@@ -128,15 +118,33 @@ services:
       - database
       - configserver
       - eurekaserver
+      - kafka
     restart: on-failure
+    networks:
+      backend:
+        aliases:
+          - "auth-service"
+  order-service:
+    image: wk-delivery-app/order-service:0.0.1-SNAPSHOT
     ports:
       - "8084:8084"
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+      ENCRYPT_KEY: "xnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeL"
+    depends_on:
+      - database
+      - configserver
+      - eurekaserver
+      - kafka
+    restart: on-failure
     networks:
       backend:
         aliases:
           - "order-service"
   shipping-service:
     image: wk-delivery-app/shipping-service:0.0.1-SNAPSHOT
+    ports:
+      - "8085:8085"
     environment:
       SPRING_PROFILES_ACTIVE: "docker"
       ENCRYPT_KEY: "xnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeL"
@@ -145,15 +153,16 @@ services:
       - redis
       - configserver
       - eurekaserver
+      - kafka
     restart: on-failure
-    ports:
-      - "8085:8085"
     networks:
       backend:
         aliases:
           - "shipping-service"
   query-service:
     image: wk-delivery-app/query-service:0.0.1-SNAPSHOT
+    ports:
+      - "8086:8086"
     environment:
       SPRING_PROFILES_ACTIVE: "docker"
       ENCRYPT_KEY: "xnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeL"
@@ -161,9 +170,8 @@ services:
       - database
       - configserver
       - eurekaserver
+      - kafka
     restart: on-failure
-    ports:
-      - "8086:8086"
     networks:
       backend:
         aliases:
@@ -193,11 +201,11 @@ services:
           - "grafana"
   zipkin:
     image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
     container_name: zipkin
     environment:
       - "KAFKA_BOOTSTRAP_SERVERS=kafka:9092"
-    ports:
-      - "9411:9411"
     depends_on:
       - kafka
     networks:
