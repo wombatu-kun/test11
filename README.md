@@ -60,7 +60,7 @@ Click the Dashboard icon on the left menu, select the Manage option, and click t
 
 Log in to wk-delivery-app as Admin:  
 POST http://localhost:8080/auth-service/oauth/token  
-(Authorization: Basic d2stZGVsaXZlcnktYXBwOnRoaXNpc3NlY3JldA==)
+(Authorization: Basic d2stZGVsaXZlcnktYXBwOnRoaXNpc3NlY3JldA==)  
 Basic Auth:  
 wk-delivery-app:thisissecret  
 x-www-form-urlencoded:  
