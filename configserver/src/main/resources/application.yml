@@ -1,0 +1,31 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: configserver
+  profiles:
+    active: native
+  boot:
+    admin:
+      client:
+        url: http://localhost:8089
+  cloud:
+    config:
+      server:
+        encrypt.enabled: false
+        native:
+          search-locations:
+            - classpath:/configs
+
+encrypt:
+  key: xnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeL
+
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS
+  endpoints:
+    web:
+      exposure:
+        include: "*"

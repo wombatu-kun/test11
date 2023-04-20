@@ -1,0 +1,135 @@
+server:
+  port: 8080
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8082/eureka/
+
+logging:
+  level:
+    root: INFO
+    liquibase: WARN
+    wombatukun: DEBUG
+
+auth:
+  signing-key: '{cipher}455d952fd23bcadf31fe76b2fbede0ac1a25cbe0fb179c9fa2a2c8b36a2ebfc4a345db1b91000109dbe47e0f1eb776c08b15fab2d4367492116286633d9da3a5'
+
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: "*"
+
+spring:
+  boot:
+    admin:
+      client:
+        url: http://localhost:8089
+
+  redis:
+    host: localhost
+    port: 6379
+
+  zipkin:
+    baseUrl: http://localhost:9411
+    sender.type: web
+  sleuth.sampler.percentage: 1
+
+  cloud:
+    gateway:
+#      discovery.locator:
+#        enabled: true
+#        lowerCaseServiceId: true
+      default-filters:
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter:
+              replenishRate: 10
+              burstCapacity: 20
+              requestedTokens: 1
+        - name: Retry
+          args:
+            retries: 3
+            methods: GET
+            backoff:
+              firstBackoff: 50ms
+              maxBackoff: 500ms
+      routes:
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth-service/**
+          filters:
+            - RewritePath=/auth-service/(?<path>.*), /$\{path}
+            - name: CircuitBreaker
+              args:
+                name: auth-service
+                fallbackUri: forward:/fallback
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/order-service/**
+          filters:
+            - RewritePath=/order-service/(?<path>.*), /$\{path}
+            - name: CircuitBreaker
+              args:
+                name: order-service
+                fallbackUri: forward:/fallback
+        - id: shipping-service
+          uri: lb://shipping-service
+          predicates:
+            - Path=/shipping-service/**
+          filters:
+            - RewritePath=/shipping-service/(?<path>.*), /$\{path}
+            - name: CircuitBreaker
+              args:
+                name: order-service
+                fallbackUri: forward:/fallback
+        - id: query-service
+          uri: lb://query-service
+          predicates:
+            - Path=/query-service/**
+          filters:
+            - RewritePath=/query-service/(?<path>.*), /$\{path}
+            - name: CircuitBreaker
+              args:
+                name: query-service
+                fallbackUri: forward:/fallback
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenedState: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        registerHealthIndicator: true
+    instances:
+      auth-service:
+        baseConfig: default
+      order-service:
+        baseConfig: default
+      shipping-service:
+        baseConfig: default
+      query-service:
+        baseConfig: default
+  timelimiter:
+    instances:
+      auth-service:
+        timeoutDuration: 3s
+      order-service:
+        timeoutDuration: 3s
+      shipping-service:
+        timeoutDuration: 3s
+      query-service:
+        timeoutDuration: 3s

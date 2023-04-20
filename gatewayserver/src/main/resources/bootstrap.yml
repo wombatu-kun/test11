@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: gatewayserver
+  cloud:
+    config:
+      uri: http://localhost:8081
+
+logging:
+  level:
+    com.netflix: WARN
+    org.springframework.web: WARN
+    wombatukun.tests: DEBUG
+
+encrypt:
+  key: xnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeL

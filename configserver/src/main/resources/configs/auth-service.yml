@@ -1,0 +1,74 @@
+server:
+  port: 8083
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: 'org.hibernate.dialect.PostgreSQLDialect'
+        jdbc.lob.non_contextual_creation: true
+    hibernate.ddl-auto: none
+    show-sql: true
+
+  datasource:
+    url: 'jdbc:postgresql://localhost:5432/delivery_users'
+    username: postgres
+    password: '{cipher}34964d42d5eb2434cb7c072cbc80a311ee718f7836e8f6c1dfe38a2358865267'
+    testWhileIdle: true
+    validationQuery: SELECT 1
+
+  liquibase:
+    change-log: classpath:db/db.changelog-master.xml
+
+  jackson:
+    default-property-inclusion: non_null
+
+  boot:
+    admin:
+      client:
+        url: http://localhost:8089
+
+  kafka:
+    bootstrap-servers:
+      - localhost:9092
+    template:
+      default-topic: users
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+  zipkin:
+    baseUrl: http://localhost:9411
+    sender.type: kafka
+  sleuth.sampler.percentage: 1
+
+logging:
+  level:
+    root: INFO
+    liquibase: WARN
+    wombatukun: DEBUG
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8082/eureka/
+
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: "*"
+
+auth:
+  client: wk-delivery-app
+  secret: '{cipher}63ff572e8e731b19379753a8f7374d43683d7edcf7b26a695bedd176bd0a31c4'
+  signing-key: '{cipher}455d952fd23bcadf31fe76b2fbede0ac1a25cbe0fb179c9fa2a2c8b36a2ebfc4a345db1b91000109dbe47e0f1eb776c08b15fab2d4367492116286633d9da3a5'
+  access-token-validity-seconds: 10800
+  refresh-token-validity-seconds: 28800

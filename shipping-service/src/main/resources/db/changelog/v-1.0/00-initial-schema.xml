@@ -1,0 +1,25 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="2023-03-15:01-shipping" author="wombatu-kun">
+        <createTable tableName="shipping">
+            <column name="order_id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_shipping"/>
+            </column>
+            <column name="was_at" type="timestamp">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_shipping"/>
+            </column>
+            <column name="courier_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="latitude" type="double">
+                <constraints nullable="false"/>
+            </column>
+            <column name="longitude" type="double">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

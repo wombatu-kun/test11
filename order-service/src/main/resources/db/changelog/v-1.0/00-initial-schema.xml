@@ -1,0 +1,40 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="2023-03-10:01-orders" author="wombatu-kun">
+        <createTable tableName="orders">
+            <column name="id" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="courier_id" type="bigint"/>
+        </createTable>
+
+        <createTable tableName="details">
+            <column name="order_id" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="departure" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="destination" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cost" type="currency"/>
+            <column name="recipient_name" type="varchar(30)"/>
+            <column name="recipient_phone" type="varchar(15)"/>
+        </createTable>
+
+        <createSequence sequenceName="order_id_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gatewayserver
+
+logging:
+  level:
+    root: INFO
+    liquibase: WARN
+    wombatukun: DEBUG
+
+auth:
+  signing-key: QnEPrusbBSnMaSjkyP3hdXA49BFXbWEeQh27x4LmeX

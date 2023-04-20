@@ -1,0 +1,29 @@
+server:
+  port: 8082
+
+spring:
+  boot:
+    admin:
+      client:
+        url: http://localhost:8089
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://localhost:${server.port}/eureka/
+  server:
+    waitTimeInMsWhenSyncEmpty: 5
+
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: "*"

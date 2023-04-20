@@ -1,0 +1,12 @@
+server:
+  port: 8089
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registryFetchIntervalSeconds: 5
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8082/eureka

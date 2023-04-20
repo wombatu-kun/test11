@@ -1,0 +1,86 @@
+server:
+  port: 8084
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: 'org.hibernate.dialect.PostgreSQLDialect'
+        jdbc.lob.non_contextual_creation: true
+    hibernate.ddl-auto: none
+    show-sql: true
+
+  datasource:
+    url: 'jdbc:postgresql://localhost:5432/delivery_orders'
+    username: postgres
+    password: '{cipher}34964d42d5eb2434cb7c072cbc80a311ee718f7836e8f6c1dfe38a2358865267'
+    testWhileIdle: true
+    validationQuery: SELECT 1
+
+  liquibase:
+    change-log: classpath:db/db.changelog-master.xml
+
+  jackson:
+    default-property-inclusion: non_null
+
+  boot:
+    admin:
+      client:
+        url: http://localhost:8089
+
+  kafka:
+    bootstrap-servers:
+      - localhost:9092
+    template:
+      default-topic: orders
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      user-topic: users
+      group-id: order-group
+      auto-offset-reset: earliest
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: wombatukun.tests.test11.*
+
+  zipkin:
+    baseUrl: http://localhost:9411
+    sender.type: kafka
+  sleuth:
+    sampler.percentage: 1
+    async.enabled: false
+
+redis:
+  host: localhost
+  port: 6379
+
+logging:
+  level:
+    root: INFO
+    liquibase: WARN
+    wombatukun: DEBUG
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8082/eureka/
+
+auth:
+  service-id: auth-service
+  instance: http://localhost:8083
+  user-path: v1/users
+  signing-key: '{cipher}455d952fd23bcadf31fe76b2fbede0ac1a25cbe0fb179c9fa2a2c8b36a2ebfc4a345db1b91000109dbe47e0f1eb776c08b15fab2d4367492116286633d9da3a5'
+
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: "*"

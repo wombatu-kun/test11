@@ -1,0 +1,45 @@
+plugins {
+	id 'java'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('webVersion', "5.3.25")
+	set('tomcatVersion', "9.0.71")
+	set('securityVersion', "5.7.7")
+	set('dataVersion', "2.7.8")
+	set('jjwtVersion', "0.11.2")
+	set('lombokVersion', "1.18.26")
+}
+
+dependencies {
+	implementation "org.springframework:spring-web:${webVersion}"
+	implementation "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}"
+	implementation "org.springframework.security:spring-security-core:${securityVersion}"
+	implementation "org.springframework.data:spring-data-commons:${dataVersion}"
+	implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
+	implementation "io.jsonwebtoken:jjwt-impl:${jjwtVersion}"
+	implementation "io.jsonwebtoken:jjwt-jackson:${jjwtVersion}"
+	compileOnly "org.projectlombok:lombok:${lombokVersion}"
+	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+jar.enabled = true
