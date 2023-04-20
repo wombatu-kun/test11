@@ -49,7 +49,7 @@ Implement a solution that enables the user stories provided. This solution must 
 - Resilience4j in gateway-service: RequestRateLimiter (redis), Retry, CircuitBreaker, TimeLimiter.
 
 #### Solution Architecture Diagram
-<img src="https://raw.githubusercontent.com/wombatu-kun/test11/dev/diagram.png?sanitize=true&raw=true" />  
+<img src="https://raw.githubusercontent.com/wombatu-kun/test11/main/diagram.png?sanitize=true&raw=true" />  
   
 #### Build, start in docker & set up:  
 export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64  
