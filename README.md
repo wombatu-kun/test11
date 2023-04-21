@@ -29,7 +29,7 @@ Implement a solution that enables the user stories provided. This solution must 
 - ^Can save track (current coordinates) while shipping orders [POST http://localhost:8080/shipping-service/v1/orders/shipping].  
 
 #### Preferable technologies
-- Java 8+, Gradle (preferable) or Maven - OK (Java 11, Gradle);  
+- Java 8+, Gradle (preferable) or Maven - OK (Java 17, Gradle);  
 - Spring Boot, Spring Data JPA (use Postgres), Liquibase - OK (Boot 2.7.9, PostgreSQL 13.4);  
 - Proxy/API Gateway - OK (Spring cloud gateway);  
 - Message Brokers - OK (Kafka);  
@@ -52,7 +52,7 @@ Implement a solution that enables the user stories provided. This solution must 
 <img src="https://raw.githubusercontent.com/wombatu-kun/test11/main/diagram.png?sanitize=true&raw=true" />  
   
 #### Build, start in docker & set up:  
-export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64  
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 
 ./gradlew bootBuildImage  
 docker-compose -f docker-compose.yml up
 
@@ -80,7 +80,8 @@ Get value of access_token field from response and use it as Authorization header
 - открытый доступ к актуаторам и adminserver;  
 - 500ка вместо 401/403 в gatewayserver'е при протухшем токене.  
 ##### Возможные улучшательства
-- переделать под Java 17 и Spring Boot 3;
+- переделать на Spring Boot 3 (до Java 17 уже проапгрейдил);
+- сделать swagger с GroupOpenAPI на gatewayserver'е;
 - embedded keycloak в качестве сервера аутентификации (или не keycloak, но самодельный JWT без спрингового oauth2 и множественные роли);    
 - объединить в один инстанс ConfigServer и Eureka;  
 - запросы получения/записи треков в shipping-service через websocket;  
