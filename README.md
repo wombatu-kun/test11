@@ -80,6 +80,7 @@ Get value of access_token field from response and use it as Authorization header
 - открытый доступ к актуаторам и adminserver;  
 - 500ка вместо 401/403 в gatewayserver'е при протухшем токене.  
 ##### Возможные улучшательства
+- переделать под Java 17 и Spring Boot 3;
 - embedded keycloak в качестве сервера аутентификации (или не keycloak, но самодельный JWT без спрингового oauth2 и множественные роли);    
 - объединить в один инстанс ConfigServer и Eureka;  
 - запросы получения/записи треков в shipping-service через websocket;  
