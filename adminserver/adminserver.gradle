@@ -1,7 +1,7 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '2.7.9'
-	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'org.springframework.boot' version '3.0.6'
+	id 'io.spring.dependency-management' version '1.1.0'
 }
 
 sourceCompatibility = '17'
@@ -13,8 +13,8 @@ configurations {
 }
 
 ext {
-	set('springBootAdminVersion', "2.7.4")
-	set('springCloudVersion', "2021.0.6")
+	set('springBootAdminVersion', "3.0.2")
+	set('springCloudVersion', "2022.0.2")
 }
 
 dependencies {
