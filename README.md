@@ -75,12 +75,9 @@ Get value of access_token field from response and use it as Authorization header
 
 #### Хорошо бы доделать/переделать
 ##### Имеющиеся недочёты
-- использование deprecated WebSecurityConfigurerAdapter в ресурс-серверах;
 - симметричная подпись JWT;  
-- открытый доступ к актуаторам и adminserver;  
-- 500ка вместо 401/403 в gatewayserver'е при протухшем токене.  
-##### Возможные улучшательства
-- переделать на Spring Boot 3 (gatewayserver и auth-service);
+- открытый доступ к актуаторам и adminserver;    
+##### Возможные улучшательства  
 - сделать swagger с GroupOpenAPI на gatewayserver'е;
 - embedded keycloak в качестве сервера аутентификации (или не keycloak, но самодельный JWT без спрингового oauth2 и множественные роли);    
 - объединить в один инстанс ConfigServer и Eureka;  
