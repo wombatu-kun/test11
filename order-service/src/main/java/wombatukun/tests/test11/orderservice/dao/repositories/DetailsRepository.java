@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import wombatukun.tests.test11.orderservice.dao.entities.Details;
 
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 @Repository
 public interface DetailsRepository extends JpaRepository<Details, Long> {

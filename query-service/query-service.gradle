@@ -1,7 +1,7 @@
 plugins {
 	id 'groovy'
-	id 'org.springframework.boot' version '2.7.9'
-	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'org.springframework.boot' version '3.0.6'
+	id 'io.spring.dependency-management' version '1.1.0'
 }
 
 sourceCompatibility = '17'
@@ -13,13 +13,12 @@ configurations {
 }
 
 ext {
-	set('springCloudVersion', "2021.0.6")
-	set('swaggerVersion', '1.6.14')
+	set('springCloudVersion', "2022.0.2")
+	set('swaggerVersion', '2.1.0')
 	set('oauth2Version', '2.5.2.RELEASE')
-	set('springVersion', '5.7.7')
+	set('springVersion', '6.0.3')
 	set('micrometerVersion', '1.10.5')
-	set('spockVersion', '2.0-groovy-3.0')
-	set('springVersion', '5.7.7')
+	set('spockVersion', '2.4-M1-groovy-3.0')
 }
 
 dependencies {
@@ -33,9 +32,9 @@ dependencies {
 	implementation "org.springframework.security.oauth:spring-security-oauth2:${oauth2Version}"
 	implementation "org.springframework.security:spring-security-oauth2-resource-server:${springVersion}"
 	implementation "org.springframework.kafka:spring-kafka"
-	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
-	implementation 'org.springframework.cloud:spring-cloud-sleuth-zipkin'
-	implementation "org.springdoc:springdoc-openapi-ui:${swaggerVersion}"
+	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${swaggerVersion}"
 	implementation "io.micrometer:micrometer-core:${micrometerVersion}"
 	implementation "io.micrometer:micrometer-registry-prometheus:${micrometerVersion}"
 	implementation 'org.liquibase:liquibase-core'

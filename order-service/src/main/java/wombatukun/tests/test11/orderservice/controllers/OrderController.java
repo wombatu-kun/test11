@@ -22,7 +22,7 @@ import wombatukun.tests.test11.orderservice.enums.Status;
 import wombatukun.tests.test11.orderservice.exceptions.handlers.GlobalExceptionHandler;
 import wombatukun.tests.test11.orderservice.services.OrderService;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 
 @RestController

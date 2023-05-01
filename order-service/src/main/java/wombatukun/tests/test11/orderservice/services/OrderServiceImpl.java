@@ -81,6 +81,7 @@ public class OrderServiceImpl implements OrderService {
         }
         log.debug("form: {}", form);
         OrderSpec spec = orderMapper.mapSearchFormToSpec(form);
+        log.debug("spec: {}", spec.getQuery());
         Pageable pageable = PageRequest.of(form.getPage(), form.getPageSize());
         Page<Order> orders = orderRepository.findAll(spec, pageable);
         return PageDto.of(orders, orderMapper::mapEntityToOrderDto);
