@@ -19,7 +19,7 @@ repositories {
 
 ext {
 	set('webVersion', "5.3.25")
-	set('tomcatVersion', "9.0.71")
+	set('jakartaVersion', "6.0.0")
 	set('securityVersion', "5.7.7")
 	set('dataVersion', "2.7.8")
 	set('jjwtVersion', "0.11.2")
@@ -28,7 +28,7 @@ ext {
 
 dependencies {
 	implementation "org.springframework:spring-web:${webVersion}"
-	implementation "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}"
+	implementation "jakarta.servlet:jakarta.servlet-api:${jakartaVersion}"
 	implementation "org.springframework.security:spring-security-core:${securityVersion}"
 	implementation "org.springframework.data:spring-data-commons:${dataVersion}"
 	implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"

@@ -1,5 +1,7 @@
 package wombatukun.tests.test11.shippingservice;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -23,6 +25,7 @@ import java.util.Locale;
 @RefreshScope
 @EnableDiscoveryClient
 @EnableAsync
+@OpenAPIDefinition(info = @Info(title = "Shipping-service API", version = "1.0", description = "Shipping-service API v1.0"))
 public class ShippingApp implements AsyncConfigurer {
 
 	@Value("${auth.signing-key}")

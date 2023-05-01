@@ -1,14 +1,16 @@
 package wombatukun.tests.test11.orderservice.dao.specifications;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import lombok.Getter;
 import org.springframework.data.jpa.domain.Specification;
 import wombatukun.tests.test11.orderservice.dao.entities.Order;
 import wombatukun.tests.test11.orderservice.dao.queries.OrderQuery;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public class OrderSpec implements Specification<Order> {
@@ -22,29 +24,29 @@ public class OrderSpec implements Specification<Order> {
 
 	@Override
 	public Predicate toPredicate(Root<Order> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
-		Predicate p = cb.conjunction();
+		List<Predicate> expressions = new ArrayList<>();
 
 		if (query.getUserId() != null) {
-			p.getExpressions().add(cb.equal(root.get("userId"), query.getUserId()));
+			expressions.add(cb.equal(root.get("userId"), query.getUserId()));
 		}
 
 		if (query.getCourierId() != null) {
-			p.getExpressions().add(cb.equal(root.get("courierId"), query.getCourierId()));
+			expressions.add(cb.equal(root.get("courierId"), query.getCourierId()));
 		}
 
 		if (query.getStatus() != null) {
-			p.getExpressions().add(cb.equal(root.get("status"), query.getStatus()));
+			expressions.add(cb.equal(root.get("status"), query.getStatus()));
 		}
 
 		if (query.getCreatedFrom() != null) {
-			p.getExpressions().add(cb.greaterThanOrEqualTo(root.get("createdAt"), query.getCreatedFrom()));
+			expressions.add(cb.greaterThanOrEqualTo(root.get("createdAt"), query.getCreatedFrom()));
 		}
 
 		if (query.getCreatedTo() != null) {
-			p.getExpressions().add(cb.lessThanOrEqualTo(root.get("createdAt"), query.getCreatedTo()));
+			expressions.add(cb.lessThanOrEqualTo(root.get("createdAt"), query.getCreatedTo()));
 		}
 
-		return p;
+		return cb.and(expressions.toArray(new Predicate[0]));
 	}
 
 }

@@ -1,5 +1,7 @@
 package wombatukun.tests.test11.orderservice.mappers
 
+import brave.Tracer
+import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification
@@ -22,6 +24,9 @@ class OrderMapperTest extends Specification {
 	@Subject
 	@Autowired
 	private OrderMapper orderMapper
+
+	@SpringBean
+	private Tracer tracer = Mock()
 
 	private static Order createOrderEntity() {
 		Order order = new Order()

@@ -1,5 +1,7 @@
 package wombatukun.tests.test11.orderservice;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -8,7 +10,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -20,13 +21,13 @@ import wombatukun.tests.test11.common.security.JWTUtil;
 import wombatukun.tests.test11.common.usercontext.UserContextInterceptor;
 import wombatukun.tests.test11.orderservice.exceptions.handlers.CustomAsyncExceptionHandler;
 
-import java.io.IOException;
 import java.util.Locale;
 
 @SpringBootApplication
 @RefreshScope
 @EnableDiscoveryClient
 @EnableAsync
+@OpenAPIDefinition(info = @Info(title = "Order-service API", version = "1.0", description = "Order-service API v1.0"))
 public class OrderApp implements AsyncConfigurer {
 
 	@Value("${auth.signing-key}")

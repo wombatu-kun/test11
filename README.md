@@ -30,7 +30,7 @@ Implement a solution that enables the user stories provided. This solution must 
 
 #### Preferable technologies
 - Java 8+, Gradle (preferable) or Maven - OK (Java 17, Gradle);  
-- Spring Boot, Spring Data JPA (use Postgres), Liquibase - OK (Boot 2.7.9, PostgreSQL 13.4);  
+- Spring Boot, Spring Data JPA (use Postgres), Liquibase - OK (Boot 2.7.9, Boot 3.0.6, PostgreSQL 13.4);  
 - Proxy/API Gateway - OK (Spring cloud gateway);  
 - Message Brokers - OK (Kafka);  
 - Swagger (detailed API description for resources) - OK (springdoc-openapi in every service);  
@@ -80,7 +80,7 @@ Get value of access_token field from response and use it as Authorization header
 - открытый доступ к актуаторам и adminserver;  
 - 500ка вместо 401/403 в gatewayserver'е при протухшем токене.  
 ##### Возможные улучшательства
-- переделать на Spring Boot 3 (до Java 17 уже проапгрейдил);
+- переделать на Spring Boot 3 (gatewayserver и auth-service);
 - сделать swagger с GroupOpenAPI на gatewayserver'е;
 - embedded keycloak в качестве сервера аутентификации (или не keycloak, но самодельный JWT без спрингового oauth2 и множественные роли);    
 - объединить в один инстанс ConfigServer и Eureka;  
